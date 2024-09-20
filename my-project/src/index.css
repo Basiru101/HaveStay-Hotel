@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+body{
+    background-color: rgb(241, 245, 241);
+}
+
+
+/* index.css */
+
+/* Typewriter effect styles */
+@keyframes type {
+    0% {
+      width: 0%;
+    }
+    70% {
+      width: 100%;
+    }
+    100% {
+      width: 0%;
+    }
+  }
+  
+  @keyframes blink {
+    50% {
+      border-color: transparent;
+    }
+  }
+  
+  .animate-type {
+    overflow: hidden;
+    white-space: nowrap;
+    animation: type 6s steps(40, end) infinite, blink 0.75s step-end infinite;
+  }
+  
