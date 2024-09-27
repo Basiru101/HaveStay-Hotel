@@ -7,7 +7,7 @@ export const getDashboardData = async () => {
         const response = await axios.get(API_URL);
         return response.data;
     } catch (error) {
-        console.error('Error fetching dashboard data:', error);
+        console.error('Error fetching dashboard dat:', error);
         throw error;
     }
 };

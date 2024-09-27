@@ -6,8 +6,7 @@ import userRouter from './routes/user.route.js';
 import authRouter from './routes/auth.route.js';
 import listingRouter from './routes/listing.route.js';
 import cookieParser from 'cookie-parser';
-// import dashboardRoutes from './routes/dashboard.route.js';
-// import cors from 'cors';
+
 
 dotenv.config();
 
@@ -34,11 +33,6 @@ app.use('/backend/auth', authRouter);
 app.use('/backend/listing', listingRouter);
 // app.use('/backend', dashboardRoutes);
 
-// app.use(cors({
-//   origin: 'http://localhost:5173', // Your frontend URL
-//   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-//   credentials: true, // Allow cookies to be sent with requests
-// }))
 
 // Error handling middleware
 app.use((err, req, res, next) => {

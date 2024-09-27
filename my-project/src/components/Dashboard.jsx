@@ -13,8 +13,8 @@ const Dashboard = () => {
 
   // Simulated data function
   const simulateData = () => {
-    const totalRevenue = Math.floor(Math.random() * 1000000);
-    const pendingPayments = Math.floor(Math.random() * 100000);
+    const totalRevenue = Math.floor(Math.random() * 100000);
+    const pendingPayments = Math.floor(Math.random() * 10000);
     const successfulTransactions = Math.floor(Math.random() * 1000);
     const failedTransactions = Math.floor(Math.random() * 100);
 
@@ -131,7 +131,7 @@ const Dashboard = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-4xl font-bold mb-8 text-center text-gray-800 pt-16">
-        Advanced Payment Dashboard
+       HavenStay Advanced Payment Dashboard
       </h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
