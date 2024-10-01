@@ -9,13 +9,11 @@ import cookieParser from 'cookie-parser';
 
 
 dotenv.config();
-
 const app = express();
 const port = 3000;
 
 // Middleware to parse JSON bodies
 app.use(express.json()); // This middleware parses JSON request bodies
-
 app.use(cookieParser());
 
 // Database connection
@@ -31,7 +29,6 @@ mongoose.connect(process.env.MONGO, { useNewUrlParser: true, useUnifiedTopology:
 app.use('/backend/user', userRouter);
 app.use('/backend/auth', authRouter);
 app.use('/backend/listing', listingRouter);
-// app.use('/backend', dashboardRoutes);
 
 
 // Error handling middleware
