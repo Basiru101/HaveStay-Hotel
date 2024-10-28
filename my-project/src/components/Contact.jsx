@@ -62,6 +62,14 @@ export default function Contact({ listing }) {
             <img className='w-6' src='/images/whatsapp-icon.webp' alt='WhatsApp Icon' />
             Continue to Chat
           </button>
+
+          {/* Proceed to Payment Button */}
+          <Link
+            to={`/payment/${listing._id}`} // Adjust the route as necessary
+            className='bg-blue-500 text-white text-center p-3 uppercase rounded-lg hover:opacity-95'
+          >
+            Proceed to Payment
+          </Link>
         </div>
       )}
     </>

@@ -75,9 +75,9 @@ export default function Header() {
           <Link to='/about'>
             <li className='text-slate-700 hover:underline'>About</li>
           </Link>
-          <Link to='/payment'>
+          {/* <Link to='/payment'>
             <li className='text-slate-700 hover:underline'>Payment Form</li>
-          </Link>
+          </Link> */}
           <Link to='/profile'>
             {currentUser ? (
               <img

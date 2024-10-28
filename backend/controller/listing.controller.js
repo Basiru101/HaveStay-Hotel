@@ -136,13 +136,17 @@ export const addPayment = async (req, res) => {
 };
 
 // Get all payments for the logged-in user
-export const getPayments = async (req, res, next) => {
+export const getPayments = async (req, res) => {
   console.log("HERE");
   try {
     const payments = await Payment.find({ userRef: req.user._id });
+
+    // req.body = payments; // Correctly reference Payment
+
     // .sort({ $natural: 1 })
     // .limit(10); // Correctly reference Payment
-    return res.status(200).json({ success: true, payments : payments });
+    return res.status(200).json({ success: true, payments });
+    // next(); // Correctly reference Payment
   } catch (error) {
     console.log(error?.message, "error getting payments");
     // next(error);

@@ -62,23 +62,29 @@
 //     </div>
 //   );
 // };
-// PaymentForm.js
-// PaymentForm.jsx
-import React, { useState } from "react";
+
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 import { store } from "../redux/store";
 
 const PaymentForm = ({ onPaymentSubmit = () => {} }) => {
   const user = store.getState().user;
-  let listingId = '671a74f65ee1d7542261f16d';
-  
+  const { listingId } = useParams();
   const [amount, setAmount] = useState("");
   const [method, setMethod] = useState("Credit Card");
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
   const [error, setError] = useState("");
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false); // State for success popup
+
+  useEffect(() => {
+    // Clear error when form fields change
+    setError("");
+  }, [amount, method, date, listingId, user?.currentUser?._id]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!amount || parseFloat(amount) <= 0) {
       return setError("Please enter a valid amount.");
     }
@@ -88,31 +94,52 @@ const PaymentForm = ({ onPaymentSubmit = () => {} }) => {
       method,
       date,
       listingRef: listingId,
-      userRef: user.currentUser._id,
+      userRef: user?.currentUser?._id, // Check for currentUser in store
     };
 
+    // Debugging logs
+    console.log("Payment Details:", paymentDetails);
+
     try {
-      const response = await axios.post("/backend/payments/add", paymentDetails);
-      onPaymentSubmit(response.data.payload);
-      setError("");
+      const response = await axios.post(
+        "/backend/payments/add",
+        paymentDetails
+      );
+      console.log(response);
+
+      if (response.status === 201) {
+        onPaymentSubmit(response.data.payment);
+        setShowSuccessPopup(true); // Show success popup
+        // Clear form fields after successful submission
+        setAmount("");
+        setMethod("Credit Card");
+        setDate(new Date().toISOString().split("T")[0]);
+      } else {
+        throw new Error("Unexpected response from server");
+      }
     } catch (err) {
       console.error("Error saving payment:", err);
       setError("Failed to save payment. Please try again.");
     }
+  };
 
-    setAmount("");
-    setMethod("Credit Card");
-    setDate(new Date().toISOString().split("T")[0]);
+  // Function to close the success popup
+  const closePopup = () => {
+    setShowSuccessPopup(false);
+    window.location.href = "/"; // Redirect to dashboard after successful payment
   };
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-md mb-8 max-w-md mx-auto relative top-1">
       <form onSubmit={handleSubmit}>
         <h2 className="text-xl font-semibold mb-4 mt-20">Payment Form</h2>
+
         {error && <p className="text-red-500 mb-4">{error}</p>}
 
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-2" htmlFor="amount">Amount</label>
+          <label className="block text-sm font-medium mb-2" htmlFor="amount">
+            Amount
+          </label>
           <input
             type="number"
             id="amount"
@@ -125,7 +152,9 @@ const PaymentForm = ({ onPaymentSubmit = () => {} }) => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-2" htmlFor="method">Payment Method</label>
+          <label className="block text-sm font-medium mb-2" htmlFor="method">
+            Payment Method
+          </label>
           <select
             id="method"
             value={method}
@@ -140,24 +169,41 @@ const PaymentForm = ({ onPaymentSubmit = () => {} }) => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-2" htmlFor="date">Date</label>
+          <label className="block text-sm font-medium mb-2" htmlFor="date">
+            Payment Date
+          </label>
           <input
             type="date"
             id="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
             className="border p-2 rounded w-full"
-            required
           />
         </div>
 
         <button
           type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-200"
+          className="bg-blue-500 text-white px-4 py-2 rounded w-full hover:bg-blue-600 transition-colors"
         >
-          Save Payment
+          Submit Payment
         </button>
       </form>
+
+      {/* Success Popup */}
+      {showSuccessPopup && (
+        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-6 rounded-lg shadow-md max-w-sm">
+            <h3 className="text-lg font-semibold mb-4">Payment Successful!</h3>
+            <p>Your payment has been processed successfully.</p>
+            <button
+              onClick={closePopup}
+              className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -359,41 +359,45 @@
 //   );
 // };
 // Dashboard.js
-// Dashboard.jsx
 import React, { useEffect, useState, useRef } from "react";
-import axios from "axios";
 import Chart from "chart.js/auto";
 import moment from "moment";
 import "tailwindcss/tailwind.css";
+import axios from "axios";
+import { timeAgo } from "../utils/helper";
 
 const Dashboard = () => {
+  const [transactions, setTransactions] = useState([]);
   const [data, setData] = useState(() => {
     const savedData = localStorage.getItem("dashboardData");
-    return savedData ? JSON.parse(savedData) : {
-      totalRevenue: 48063,
-      pendingPayments: 11787,
-      successfulTransactions: 509,
-      failedTransactions: 10,
-    };
+    return savedData
+      ? JSON.parse(savedData)
+      : {
+          totalRevenue: 48063,
+          pendingPayments: 11787,
+          successfulTransactions: 509,
+          failedTransactions: 10,
+        };
   });
 
-  const [transactions, setTransactions] = useState([
-    {
-      date: moment().subtract(2, "days").format("YYYY-MM-DD"),
-      transactionId: "TXN-123456789",
-      amount: "150.00",
-    },
-    {
-      date: moment().subtract(1, "days").format("YYYY-MM-DD"),
-      transactionId: "TXN-987654321",
-      amount: "200.00",
-    },
-    {
-      date: moment().format("YYYY-MM-DD"),
-      transactionId: "TXN-112233445",
-      amount: "300.00",
-    },
-  ]);
+  // get array of user transactions from back
+  const getAllPayments = async () => {
+    try {
+      const response = await axios.get("/backend/payments/all");
+
+      if (response.status === 200) {
+        console.log("get all payments", response);
+        setTransactions(response.data.payments);
+        console.log(response?.data);
+      } else {
+        throw new Error("Unexpected response from server");
+      }
+    } catch (err) {
+      console.log(err);
+
+      throw new Error("Failed to fetch transactions from server");
+    }
+  };
 
   const revenueChartRef = useRef(null);
   const paymentMethodsChartRef = useRef(null);
@@ -404,11 +408,18 @@ const Dashboard = () => {
       createPaymentMethodsChart();
     }
   }, []);
+  useEffect(() => {
+    console.log("asdasda");
+    getAllPayments();
+  }, []);
+  console.log(transactions);
 
   const createRevenueChart = () => {
     const ctx = revenueChartRef.current.getContext("2d");
     const labels = Array.from({ length: 12 }, (_, i) =>
-      moment().subtract(11 - i, "months").format("MMM YYYY")
+      moment()
+        .subtract(11 - i, "months")
+        .format("MMM YYYY")
     );
     const chartData = Array.from({ length: 12 }, () =>
       Math.floor(Math.random() * 100000)
@@ -466,25 +477,51 @@ const Dashboard = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-4xl mt-10 font-bold mb-8 text-center text-gray-800">
+      <h1 className="text-4xl mt-10 font-bold mb-8 pt-8 text-center text-gray-800">
         HavenStay Advanced Payment Dashboard
       </h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+      {/* Summary Cards Section */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8 ">
         {[
-          { title: "Total Revenue", value: data.totalRevenue, color: "text-green-600" },
-          { title: "Pending Payments", value: data.pendingPayments, color: "text-yellow-600" },
-          { title: "Successful Transactions", value: data.successfulTransactions, color: "text-blue-600" },
-          { title: "Failed Transactions", value: data.failedTransactions, color: "text-red-600" },
+          {
+            title: "Total Revenue",
+            value: data.totalRevenue,
+            color: "text-green-600",
+          },
+          {
+            title: "Pending Payments",
+            value: data.pendingPayments,
+            color: "text-yellow-600",
+          },
+          {
+            title: "Successful Transactions",
+            value: data.successfulTransactions,
+            color: "text-blue-600",
+          },
+          {
+            title: "Failed Transactions",
+            value: data.failedTransactions,
+            color: "text-red-600",
+          },
         ].map(({ title, value, color }, index) => (
-          <div key={index} className="dashboard-card bg-white p-6 rounded-lg shadow-md">
-            <h2 className="text-xl font-semibold mb-2 text-gray-700">{title}</h2>
-            <p className={`text-3xl font-bold ${color}`}>${value.toLocaleString()}</p>
+          <div
+            key={index}
+            className="dashboard-card bg-white p-6 rounded-lg shadow-md"
+          >
+            <h2 className="text-xl font-semibold mb-2 text-gray-700">
+              {title}
+            </h2>
+            <p className={`text-3xl font-bold ${color}`}>
+              ${value.toLocaleString()}
+            </p>
           </div>
         ))}
       </div>
 
+      {/* Charts and Transactions Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Recent Transactions Table */}
         <div className="bg-white p-6 rounded-lg shadow-md">
           <h2 className="text-2xl font-semibold mb-4">Recent Transactions</h2>
           <table className="table-auto w-full border-collapse">
@@ -493,25 +530,33 @@ const Dashboard = () => {
                 <th className="border px-4 py-2">Date</th>
                 <th className="border px-4 py-2">Transaction ID</th>
                 <th className="border px-4 py-2">Amount</th>
+                {/* <th className="border px-4 py-2">Method</th> */}
               </tr>
             </thead>
             <tbody>
-              {transactions.map((transaction, index) => (
+              {transactions?.slice(0, 10).map((transaction, index) => (
                 <tr key={index}>
-                  <td className="border px-4 py-2">{transaction.date}</td>
-                  <td className="border px-4 py-2">{transaction.transactionId}</td>
-                  <td className="border px-4 py-2">${transaction.amount}</td>
+                  <td className="border px-4 py-2">
+                    {timeAgo(transaction.date)}
+                  </td>
+                  <td className="border px-4 py-2">{transaction._id}</td>
+                  <td className="border px-4 py-2">
+                    {transaction.amount} xaf{" "}
+                  </td>
+                  {/* <td className="border px-4 py-2">{transaction.method}</td> */}
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
 
+        {/* Revenue Chart */}
         <div className="bg-white p-6 rounded-lg shadow-md">
           <h2 className="text-2xl font-semibold mb-4">Revenue Over Time</h2>
           <canvas ref={revenueChartRef} />
         </div>
 
+        {/* Payment Methods Chart */}
         <div className="bg-white p-6 rounded-lg shadow-md">
           <h2 className="text-2xl font-semibold mb-4">Payment Methods</h2>
           <canvas ref={paymentMethodsChartRef} />

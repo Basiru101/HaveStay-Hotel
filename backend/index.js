@@ -7,6 +7,8 @@ import listingRouter from "./routes/listing.route.js";
 import paymentRoutes from "./routes/payment.route.js";
 import cookieParser from "cookie-parser";
 import Stripe from "stripe"; // Import Stripe
+import bodyParser from "body-parser";
+import cors from "cors";
 
 dotenv.config();
 const app = express();
@@ -16,8 +18,10 @@ const port = 3000;
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 // Middleware to parse JSON bodies
-app.use(express.json());
+// app.use(express.json());
+app.use(bodyParser.json());
 app.use(cookieParser());
+app.use(cors());
 
 // Database connection
 mongoose
@@ -40,17 +44,18 @@ app.use("/backend/payments", paymentRoutes);
 // app.use('/backend/payments', paymentRoutes); // Corrected path
 
 // Error handling middleware
-app.use((err, req, res, next) => {
-  const statusCode = res.statusCode || 500;
-  const message = res.message;
+// app.use((err, req, res, next) => {
+//   const statusCode = res.statusCode || 500;
+//   const message = res.message;
+//   console.log(res);
 
-  return res.status(statusCode).json({
-    success: false,
-    statusCode,
-    message,
-    payload: req.body,
-  });
-});
+//   return res.status(statusCode).json({
+//     success: false,
+//     statusCode,
+//     message,
+//     payload: req.body,
+//   });
+// });
 
 // Start the server
 app.listen(port, () => {

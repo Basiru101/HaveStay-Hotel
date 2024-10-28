@@ -34,7 +34,7 @@ export default function App() {
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/admin-create-listing" element={<AdminCreateListing />} />
-          <Route path="/payment" element={<PaymentForm />} /> {/* PaymentForm route */}
+          <Route path="/payment/:listingId" element={<PaymentForm />} /> {/* PaymentForm route */}
         </Route>
       </Routes>
     </BrowserRouter>
