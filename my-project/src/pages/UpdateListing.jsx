@@ -9,7 +9,7 @@ import { app } from '../firebase';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 
-export default function UpdateListing() {
+export default function CreateListing() {
   const { currentUser } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const params = useParams();
@@ -158,7 +158,7 @@ export default function UpdateListing() {
           userRef: currentUser._id,
         }),
       });
-      const data = await res.json(); 
+      const data = await res.json();
       setLoading(false);
       if (data.success === false) {
         setError(data.message);
@@ -170,7 +170,7 @@ export default function UpdateListing() {
     }
   };
   return (
-    <main className='p-3 max-w-4xl mx-auto'>
+    <main className='p-16 max-w-4xl mx-auto'>
       <h1 className='text-3xl font-semibold text-center my-7'>
         Update a Listing
       </h1>
@@ -298,7 +298,7 @@ export default function UpdateListing() {
               <div className='flex flex-col items-center'>
                 <p>Regular price</p>
                 {formData.type === 'rent' && (
-                  <span className='text-xs'>($ / Day)</span>
+                  <span className='text-xs'>($ / day)</span>
                 )}
               </div>
             </div>
@@ -317,7 +317,7 @@ export default function UpdateListing() {
                 <div className='flex flex-col items-center'>
                   <p>Discounted price</p>
                   {formData.type === 'rent' && (
-                    <span className='text-xs'>($ / Day)</span>
+                    <span className='text-xs'>($ / day)</span>
                   )}
                 </div>
               </div>
@@ -384,3 +384,4 @@ export default function UpdateListing() {
     </main>
   );
 }
+

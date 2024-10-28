@@ -7,6 +7,8 @@ import OAuth from '../components/OAuth';
 export default function SignIn() {
   const [formData, setFormData] = useState({});
   const [showPassword, setShowPassword] = useState(false);
+  const [bookingDate, setBookingDate] = useState(''); // State for booking date
+  const [bookingTime, setBookingTime] = useState(''); // State for booking time
   const { loading, error } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -27,7 +29,7 @@ export default function SignIn() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, bookingDate, bookingTime }), // Include booking date and time
       });
       const data = await res.json();
       console.log(data);
@@ -47,7 +49,7 @@ export default function SignIn() {
   };
 
   return (
-    <div className='p-20 max-w-2xl mx-auto'> {/* Increased width to max-w-2xl */}
+    <div className='p-20 max-w-2xl mx-auto'>
       <h1 className='text-3xl text-center font-semibold my-7'>Sign In</h1>
       <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
         <input
@@ -73,6 +75,23 @@ export default function SignIn() {
             {showPassword ? '🙈' : '👁️'}
           </button>
         </div>
+        
+        {/* Date Input */}
+        <input
+          type='date'
+          className='border p-3 rounded-lg outline-none'
+          value={bookingDate}
+          onChange={(e) => setBookingDate(e.target.value)}
+        />
+        
+        {/* Time Input */}
+        <input
+          type='time'
+          className='border p-3 rounded-lg outline-none'
+          value={bookingTime}
+          onChange={(e) => setBookingTime(e.target.value)}
+        />
+
         <button
           disabled={loading}
           className='bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80'
@@ -82,7 +101,7 @@ export default function SignIn() {
         <OAuth />
       </form>
       <div className='flex gap-2 mt-5'>
-        <p>Dont have an account?</p>
+        <p>Don't have an account?</p>
         <Link to={'/sign-up'}>
           <span className='text-blue-700'>Sign up</span>
         </Link>

@@ -7,6 +7,8 @@ export default function SignUp() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [bookingDate, setBookingDate] = useState(''); // State for booking date
+  const [bookingTime, setBookingTime] = useState(''); // State for booking time
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -25,7 +27,7 @@ export default function SignUp() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, bookingDate, bookingTime }), // Include booking date and time
       });
       const data = await res.json();
       console.log(data);
@@ -48,7 +50,7 @@ export default function SignUp() {
   };
 
   return (
-    <div className='p-20 max-w-2xl mx-auto'> {/* Increased width to max-w-2xl */}
+    <div className='p-20 max-w-2xl mx-auto'>
       <h1 className='text-3xl text-center font-semibold my-7'>Sign Up</h1>
       <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
         <input
@@ -81,6 +83,23 @@ export default function SignUp() {
             {showPassword ? '🙈' : '👁️'}
           </button>
         </div>
+
+        {/* Date Input */}
+        <input
+          type='date'
+          className='border p-3 rounded-lg outline-none'
+          value={bookingDate}
+          onChange={(e) => setBookingDate(e.target.value)}
+        />
+        
+        {/* Time Input */}
+        <input
+          type='time'
+          className='border p-3 rounded-lg outline-none'
+          value={bookingTime}
+          onChange={(e) => setBookingTime(e.target.value)}
+        />
+
         <button
           disabled={loading}
           className='bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80'

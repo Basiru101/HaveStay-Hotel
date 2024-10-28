@@ -3,8 +3,96 @@
 @tailwind utilities;
 
 
+/* Smooth scrolling for internal links */
+
+html {
+  scroll-behavior: smooth; 
+}
+
+
+
+
 body{
     background-color: rgb(241, 245, 241);
+}
+
+
+/* Center content and set styling */
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+}
+
+.dashboard-title {
+  font-size: 2em;
+  margin-bottom: 10px;
+}
+
+.dashboard-stats {
+  font-size: 1.2em;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.payment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.submit-btn {
+  padding: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.submit-btn:hover {
+  background-color: #45a049;
+}
+
+.transactions-title {
+  margin-top: 20px;
+  font-size: 1.5em;
+}
+
+.transactions-list {
+  list-style-type: none;
+  padding: 0;
+  width: 100%;
+  max-width: 400px;
+}
+
+.transaction-item {
+  padding: 10px;
+  margin: 5px 0;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f1f1f1;
 }
 
 
@@ -33,5 +121,20 @@ body{
     overflow: hidden;
     white-space: nowrap;
     animation: type 6s steps(40, end) infinite, blink 0.75s step-end infinite;
+  }
+  
+
+  .admin-create{
+    display: flex;
+    flex-direction: column;
+    max-width: 50%;
+    padding: 50px;
+    margin: 20px;
+    gap: 10px;
+    margin: 0 auto;
+  }
+
+  .leaflet-control-attribution {
+    display: none !important;
   }
   

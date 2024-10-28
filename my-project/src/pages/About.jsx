@@ -10,6 +10,7 @@ export default function About() {
           <h1 className="text-3xl font-bold mb-6 text-slate-900 animate-fade-in-up">
             About HavenStay
           </h1>
+
           <p className="leading-relaxed">
             Welcome to <span className="font-semibold">HavenStay</span>, your ultimate partner in finding the perfect accommodation for every journey. 
             At HavenStay, we understand that where you stay is just as important as where you go. 
