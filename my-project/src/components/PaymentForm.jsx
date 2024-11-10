@@ -1,68 +1,3 @@
-// import React, { useState } from 'react';
-
-// const PaymentForm = ({ onPaymentSubmit = () => {} }) => {
-//   const [amount, setAmount] = useState('');
-//   const [method, setMethod] = useState('Credit Card');
-//   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     if (!amount) return;
-
-//     const paymentDetails = { amount, method, date };
-//     console.log('Payment Details:', paymentDetails); // Debugging line
-//     onPaymentSubmit(paymentDetails);
-
-//     // Clear the form
-//     setAmount('');
-//     setMethod('Credit Card');
-//     setDate(new Date().toISOString().split('T')[0]);
-//   };
-
-//   return (
-//     <div className="flex items-center justify-center min-h-screen bg-gray-100">
-//       <form onSubmit={handleSubmit} className="bg-white p-4 rounded shadow-md max-w-md w-full">
-//         <h2 className="text-xl mb-4">New Payment</h2>
-//         <div className="mb-4">
-//           <label className="block mb-2">Amount</label>
-//           <input
-//             type="number"
-//             value={amount}
-//             onChange={(e) => setAmount(e.target.value)}
-//             className="border p-2 rounded w-full"
-//             required
-//           />
-//         </div>
-//         <div className="mb-4">
-//           <label className="block mb-2">Payment Method</label>
-//           <select
-//             value={method}
-//             onChange={(e) => setMethod(e.target.value)}
-//             className="border p-2 rounded w-full"
-//           >
-//             <option value="Credit Card">Credit Card</option>
-//             <option value="PayPal">PayPal</option>
-//             <option value="Bank Transfer">Bank Transfer</option>
-//             <option value="Crypto">Crypto</option>
-//           </select>
-//         </div>
-//         <div className="mb-4">
-//           <label className="block mb-2">Date</label>
-//           <input
-//             type="date"
-//             value={date}
-//             onChange={(e) => setDate(e.target.value)}
-//             className="border p-2 rounded w-full"
-//           />
-//         </div>
-//         <button type="submit" className="bg-blue-500 text-white p-2 rounded w-full">
-//           Submit Payment
-//         </button>
-//       </form>
-//     </div>
-//   );
-// };
-
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
@@ -75,10 +10,9 @@ const PaymentForm = ({ onPaymentSubmit = () => {} }) => {
   const [method, setMethod] = useState("Credit Card");
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
   const [error, setError] = useState("");
-  const [showSuccessPopup, setShowSuccessPopup] = useState(false); // State for success popup
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
 
   useEffect(() => {
-    // Clear error when form fields change
     setError("");
   }, [amount, method, date, listingId, user?.currentUser?._id]);
 
@@ -94,23 +28,15 @@ const PaymentForm = ({ onPaymentSubmit = () => {} }) => {
       method,
       date,
       listingRef: listingId,
-      userRef: user?.currentUser?._id, // Check for currentUser in store
+      userRef: user?.currentUser?._id,
     };
 
-    // Debugging logs
-    console.log("Payment Details:", paymentDetails);
-
     try {
-      const response = await axios.post(
-        "/backend/payments/add",
-        paymentDetails
-      );
-      console.log(response);
+      const response = await axios.post("/backend/payments/add", paymentDetails);
 
       if (response.status === 201) {
-        onPaymentSubmit(response.data.payment);
-        setShowSuccessPopup(true); // Show success popup
-        // Clear form fields after successful submission
+        onPaymentSubmit({ amount: parseFloat(amount), isSuccess: true });
+        setShowSuccessPopup(true);
         setAmount("");
         setMethod("Credit Card");
         setDate(new Date().toISOString().split("T")[0]);
@@ -123,7 +49,6 @@ const PaymentForm = ({ onPaymentSubmit = () => {} }) => {
     }
   };
 
-  // Function to close the success popup
   const closePopup = () => {
     setShowSuccessPopup(false);
     window.location.href = "/"; // Redirect to dashboard after successful payment
@@ -132,7 +57,7 @@ const PaymentForm = ({ onPaymentSubmit = () => {} }) => {
   return (
     <div className="bg-white p-6 rounded-lg shadow-md mb-8 max-w-md mx-auto relative top-1">
       <form onSubmit={handleSubmit}>
-        <h2 className="text-xl font-semibold mb-4 mt-20">Payment Form</h2>
+        <h2 className="text-xl font-semibold mb-4 mt-20">Payment Form fOR Users</h2>
 
         {error && <p className="text-red-500 mb-4">{error}</p>}
 
@@ -165,6 +90,8 @@ const PaymentForm = ({ onPaymentSubmit = () => {} }) => {
             <option value="PayPal">PayPal</option>
             <option value="Bank Transfer">Bank Transfer</option>
             <option value="Crypto">Crypto</option>
+            <option value="MTN">MTN</option>
+            <option value="Orange">Orange</option>
           </select>
         </div>
 
@@ -189,12 +116,11 @@ const PaymentForm = ({ onPaymentSubmit = () => {} }) => {
         </button>
       </form>
 
-      {/* Success Popup */}
       {showSuccessPopup && (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
           <div className="bg-white p-6 rounded-lg shadow-md max-w-sm">
             <h3 className="text-lg font-semibold mb-4">Payment Successful!</h3>
-            <p>Your payment has been processed successfully.</p>
+            <p>Your payment has been paid successfully.</p>
             <button
               onClick={closePopup}
               className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"

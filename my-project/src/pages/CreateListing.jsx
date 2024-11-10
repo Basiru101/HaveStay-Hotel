@@ -9,7 +9,7 @@ import { app } from '../firebase';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-export default function CreateListings() {
+export default function CreateListing() {
   const { currentUser } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const [files, setFiles] = useState([]);
@@ -154,7 +154,7 @@ export default function CreateListings() {
     }
   };
   return (
-    <main className='p-16 max-w-4xl mx-auto'>
+    <main className='p-3 max-w-4xl mx-auto mt-10'>
       <h1 className='text-3xl font-semibold text-center my-7'>
         Create a Listing
       </h1>
@@ -282,7 +282,7 @@ export default function CreateListings() {
               <div className='flex flex-col items-center'>
                 <p>Regular price</p>
                 {formData.type === 'rent' && (
-                  <span className='text-xs'>($ / day)</span>
+                  <span className='text-xs'>(XFA / night)</span>
                 )}
               </div>
             </div>
@@ -302,7 +302,7 @@ export default function CreateListings() {
                   <p>Discounted price</p>
 
                   {formData.type === 'rent' && (
-                    <span className='text-xs'>($ / day)</span>
+                    <span className='text-xs'>(XFA / night)</span>
                   )}
                 </div>
               </div>

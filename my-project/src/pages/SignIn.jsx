@@ -77,20 +77,20 @@ export default function SignIn() {
         </div>
         
         {/* Date Input */}
-        <input
+        {/* <input
           type='date'
           className='border p-3 rounded-lg outline-none'
           value={bookingDate}
           onChange={(e) => setBookingDate(e.target.value)}
-        />
+        /> */}
         
         {/* Time Input */}
-        <input
+        {/* <input
           type='time'
           className='border p-3 rounded-lg outline-none'
           value={bookingTime}
           onChange={(e) => setBookingTime(e.target.value)}
-        />
+        /> */}
 
         <button
           disabled={loading}

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom'; // Import useNavigate
 import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperCore from 'swiper';
 import { useSelector } from 'react-redux';
@@ -24,6 +24,7 @@ export default function Listing() {
   const [contact, setContact] = useState(false);
   const params = useParams();
   const { currentUser } = useSelector((state) => state.user);
+  const navigate = useNavigate(); // Initialize useNavigate
 
   useEffect(() => {
     const fetchListing = async () => {
@@ -136,6 +137,17 @@ export default function Listing() {
                 {listing.furnished ? 'Furnished' : 'Unfurnished'}
               </li>
             </ul>
+
+            {/* Payment Button */}
+            {/* {currentUser && (
+              <button
+                onClick={() => navigate(`/payment/${params.listingId}`)} // Navigate to payment route
+                className='bg-blue-600 text-white rounded-lg uppercase hover:opacity-95 p-3 mt-4'
+              >
+                Proceed to Payment
+              </button>
+            )} */}
+
             {currentUser && listing.userRef !== currentUser._id && !contact && (
               <button
                 onClick={() => setContact(true)}

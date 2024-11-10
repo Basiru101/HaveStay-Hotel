@@ -31,10 +31,10 @@ export default function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/create-listing" element={<CreateListing />} />
           <Route path="/update-listing/:listingId" element={<UpdateListing />} />
-          <Route path="/admin/dashboard" element={<AdminDashboard />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="//dashboard" element={<AdminDashboard />} />
+          <Route path="/dasadminhboard" element={<Dashboard />} />
           <Route path="/admin-create-listing" element={<AdminCreateListing />} />
-          <Route path="/payment/:listingId" element={<PaymentForm />} /> {/* PaymentForm route */}
+          <Route path="/payment/:listingId" element={<PaymentForm />} /> 
         </Route>
       </Routes>
     </BrowserRouter>

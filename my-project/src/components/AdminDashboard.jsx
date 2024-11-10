@@ -9,7 +9,7 @@ const AdminDashboard = () => {
   const handlePaymentSubmit = (paymentDetails) => {
     const newTransaction = {
       ...paymentDetails,
-      transactionId: `TXN-${Date.now()}`, // Example of unique transaction ID
+      transactionId: `TXN-${Date.now()}`, 
     };
     setTransactions((prev) => [newTransaction, ...prev]);
   };

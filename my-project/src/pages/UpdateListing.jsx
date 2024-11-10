@@ -23,7 +23,7 @@ export default function CreateListing() {
     bedrooms: 1,
     bathrooms: 1,
     regularPrice: 50,
-    discountPrice: 0,
+    discountPrice: 50,
     offer: false,
     parking: false,
     furnished: false,
@@ -298,7 +298,7 @@ export default function CreateListing() {
               <div className='flex flex-col items-center'>
                 <p>Regular price</p>
                 {formData.type === 'rent' && (
-                  <span className='text-xs'>($ / day)</span>
+                  <span className='text-xs'>(XFA / day)</span>
                 )}
               </div>
             </div>
@@ -317,7 +317,7 @@ export default function CreateListing() {
                 <div className='flex flex-col items-center'>
                   <p>Discounted price</p>
                   {formData.type === 'rent' && (
-                    <span className='text-xs'>($ / day)</span>
+                    <span className='text-xs'>(XFA / day)</span>
                   )}
                 </div>
               </div>
